@@ -1,44 +1,206 @@
-// === ГАЗОВАЯ ПАЛИТРА ===
-// Основные цвета (более светлые)
-$color-bg-gradient-top: #f0faff;
-$color-bg-gradient-bottom: #ffffff;
-$color-accent-flame: #29b6f6;
-$color-accent-flame-end: #ffa000;
-$color-text-main: #0d47a1;
-$color-text-secondary: #37474f;
-$color-text-light: #78909c;
+// === КОРПОРАТИВНАЯ ПАЛИТРА МОСОБЛГАЗА ===
+// Основные цвета
+$color-primary: #005bbf;           // Фирменный синий Мособлгаза
+$color-primary-dark: #003876;      // Тёмно-синий для акцентов
+$color-primary-light: #4d8fd9;     // Светлый синий
+$color-accent: #ff6600;            // Оранжевый акцент
+$color-accent-light: #ff8533;      // Светлый оранжевый
+$color-accent-glow: #ffcc99;       // Свечение оранжевого
+$color-accent-flame: #ff6f3c; // Ярко-оранжевый (flame accent)
 
-// Тени и эффекты (мягче)
-$color-shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
-$color-shadow-medium: 0 8px 24px rgba(41, 182, 246, 0.12);
-$color-shadow-xl: 0 16px 48px rgba(41, 182, 246, 0.18);
-$color-glow-blue: 0 0 20px rgba(41, 182, 246, 0.3);
+// Фоны и градиенты
+$color-bg-gradient-top: #e6f3ff;   // Светло-голубой верх
+$color-bg-gradient-bottom: #ffffff; // Белый низ
+$color-bg-hero: linear-gradient(135deg, #005bbf 0%, #4d8fd9 50%, #e6f3ff 100%);
+$color-bg-gas-flame: linear-gradient(45deg, #ff6600 0%, #ff8533 30%, #ffcc99 100%);
+
+// Цвета текста
+$color-text-main: #003876;         // Основной текст
+$color-text-secondary: #005bbf;    // Вторичный текст
+$color-text-light: #666666;       // Светлый текст
+$color-text-white: #ffffff;       // Белый текст
+
+// Тени и эффекты с газовой тематикой
+$color-shadow-soft: 0 4px 20px rgba(0, 91, 191, 0.1);
+$color-shadow-medium: 0 8px 32px rgba(0, 91, 191, 0.15);
+$color-shadow-xl: 0 20px 60px rgba(0, 91, 191, 0.25);
+$color-glow-blue: 0 0 30px rgba(0, 91, 191, 0.4);
+$color-glow-orange: 0 0 40px rgba(255, 102, 0, 0.6);
+$color-flame-glow: 0 0 50px rgba(255, 102, 0, 0.8);
 
 // Карточки и поверхности
-$color-card-bg: rgba(255, 255, 255, 0.92);
-$color-card-border: rgba(41, 182, 246, 0.1);
-$color-overlay: rgba(0, 0, 0, 0.4);
+$color-card-bg: rgba(255, 255, 255, 0.95);
+$color-card-border: rgba(0, 91, 191, 0.15);
+$color-overlay: rgba(0, 56, 118, 0.5);
+$color-glass: rgba(255, 255, 255, 0.1);
 
-// === РАЗМЕРЫ ===
-$search-oval-width: 600px;
-$search-oval-height: 64px;
-$kpi-bar-height: 72px;
-$card-radius: 24px;
-$section-padding: 80px;
-
-// === АНИМАЦИИ ===
+// === АНИМАЦИИ ПОВЫШЕННОЙ СЛОЖНОСТИ ===
+$transition-ultra-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
 $transition-fast: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 $transition-smooth: 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-$transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+$transition-bounce: 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+$transition-elastic: 800ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+$transition-dramatic: 1200ms cubic-bezier(0.23, 1, 0.32, 1);
+
+// Специальные эффекты
+$transition-flame: 2s ease-in-out infinite alternate;
+$transition-pulse: 1.5s ease-in-out infinite;
+$transition-float: 3s ease-in-out infinite;
+$transition-spin: 20s linear infinite;
+
+// === BREAKPOINTS ===
+$breakpoint-xs: 480px;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+// === АДАПТИВНЫЕ РАЗМЕРЫ ===
+// Desktop размеры
+$search-oval-width: 700px;
+$search-oval-height: 72px;
+$kpi-bar-height: 80px;
+$card-radius: 28px;
+$section-padding: 100px;
+
+// Mobile размеры
+$search-oval-width-mobile: calc(100vw - 32px);
+$search-oval-height-mobile: 60px;
+$kpi-bar-height-mobile: 64px;
+$card-radius-mobile: 20px;
+$section-padding-mobile: 50px;
+
+// Tablet размеры
+$search-oval-width-tablet: 550px;
+$search-oval-height-tablet: 68px;
+$section-padding-tablet: 75px;
+
+// === ТИПОГРАФИКА АДАПТИВНАЯ ===
+$font-size-h1-desktop: clamp(3rem, 6vw, 5rem);
+$font-size-h1-mobile: clamp(2rem, 10vw, 3rem);
+$font-size-h2-desktop: clamp(2.5rem, 5vw, 3.5rem);
+$font-size-h2-mobile: clamp(1.75rem, 8vw, 2.5rem);
+$font-size-body-desktop: 1.25rem;
+$font-size-body-mobile: 1.125rem;
 
 // === ТИПОГРАФИКА ===
 $font-family-primary: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-display: 'Inter', 'Helvetica Neue', Arial, sans-serif;
 $font-weight-light: 300;
 $font-weight-regular: 400;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-black: 900;
 
 // === Z-INDEX ===
+$z-particles: 1;
+$z-content: 10;
 $z-sticky-nav: 100;
+$z-mobile-menu: 150;
 $z-modal: 200;
-$z-tooltip: 300; 
+$z-tooltip: 300;
+$z-flame-particles: 5;
+
+// === MIXINS ===
+@mixin mobile {
+  @media (max-width: #{$breakpoint-md - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-md}) and (max-width: #{$breakpoint-lg - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+
+@mixin mobile-only {
+  @media (max-width: #{$breakpoint-sm - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @media (min-width: #{$breakpoint-md}) {
+    @content;
+  }
+}
+
+// === УТИЛИТЫ ===
+@mixin container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  
+  @include mobile {
+    padding: 0 20px;
+  }
+}
+
+// === МОЩНЫЕ АНИМАЦИОННЫЕ МИКСИНЫ ===
+@mixin flame-animation {
+  animation: flameFlicker $transition-flame;
+  filter: blur(0.5px) brightness(1.1);
+}
+
+@mixin pulse-glow($color: $color-glow-blue) {
+  animation: pulseGlow $transition-pulse;
+  box-shadow: $color;
+}
+
+@mixin float-animation {
+  animation: floatUpDown $transition-float;
+}
+
+@mixin dramatic-entrance {
+  animation: dramaticEntrance $transition-dramatic forwards;
+  opacity: 0;
+  transform: translateY(50px) scale(0.8);
+}
+
+// === KEYFRAMES ===
+@keyframes flameFlicker {
+  0% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg); }
+  25% { transform: scale(1.05) rotate(1deg); filter: hue-rotate(5deg); }
+  50% { transform: scale(0.98) rotate(-1deg); filter: hue-rotate(-3deg); }
+  75% { transform: scale(1.02) rotate(0.5deg); filter: hue-rotate(2deg); }
+  100% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 91, 191, 0.4); }
+  50% { box-shadow: 0 0 40px rgba(0, 91, 191, 0.8); }
+}
+
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes dramaticEntrance {
+  0% { 
+    opacity: 0; 
+    transform: translateY(50px) scale(0.8); 
+  }
+  60% { 
+    opacity: 0.8; 
+    transform: translateY(-10px) scale(1.05); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0px) scale(1); 
+  }
+}
+
+@keyframes rotateGlow {
+  0% { transform: rotate(0deg); filter: hue-rotate(0deg); }
+  100% { transform: rotate(360deg); filter: hue-rotate(360deg); }
+} 

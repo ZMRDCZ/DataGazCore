@@ -1,189 +1,372 @@
 <template>
   <div class="hero-search">
-    <div class="search-oval" @keydown="handleKeySequence">
-      <input
-        ref="inputRef"
-        v-model="query"
-        @focus="onFocus"
-        @blur="onBlur"
-        @keyup.enter="onSearch"
-        :placeholder="placeholder"
-        class="search-input"
-        type="text"
-        aria-label="Поиск нормативных документов"
+    <div class="search-container">
+      <!-- Основная поисковая строка -->
+      <div class="search-input-wrapper">
+        <div class="search-icon">🔍</div>
+        <input 
+          v-model="searchQuery"
+          type="text"
+          class="search-input"
+          placeholder="Введите ГОСТ, СП, чертёж или инцидент…"
+          @input="handleInput"
+          @keyup.enter="performSearch"
+          @focus="handleFocus"
+          @blur="handleBlur"
+          :class="{ focused: isFocused }"
+        />
+        <button 
+          v-if="searchQuery"
+          @click="clearSearch"
+          class="clear-btn"
+          title="Очистить"
+        >
+          ✕
+        </button>
+        <VoiceSearch 
+          v-if="showVoiceSearch"
+          @result="handleVoiceResult"
+          class="voice-search"
+        />
+      </div>
+      
+      <!-- Быстрые примеры поиска -->
+      <div v-if="showExamples" class="search-examples">
+        <div class="examples-label">Попробуйте:</div>
+        <div class="examples-list">
+          <button 
+            v-for="example in searchExamples" 
+            :key="example"
+            @click="searchQuery = example; performSearch()"
+            class="example-chip"
+          >
+            {{ example }}
+          </button>
+        </div>
+      </div>
+      
+      <!-- Drag & Drop зона -->
+      <DragDropZone 
+        v-if="showDragDrop"
+        @file-drop="handleFileDrop"
+        class="drag-drop-zone"
       />
-      
-      <VoiceSearch @result="handleVoiceResult" />
-      
-      <span ref="flameRef" class="flame-icon" :class="{ active: focused, 'easter-egg': showEasterEgg }">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <defs>
-            <linearGradient id="flame-gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#29b6f6"/>
-              <stop offset="1" stop-color="#ffa000"/>
-            </linearGradient>
-          </defs>
-          <path d="M16 4C18 10 24 12 24 18C24 22 20 26 16 26C12 26 8 22 8 18C8 12 14 10 16 4Z" fill="url(#flame-gradient)"/>
-        </svg>
-      </span>
-      
-      <FlameParticles :is-active="focused" :width="64" :height="64" />
-      <DragDropZone @file-uploaded="handleFileUpload" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import VoiceSearch from './VoiceSearch.vue'
-import FlameParticles from './FlameParticles.vue'
 import DragDropZone from './DragDropZone.vue'
-import { animateFlame, easterEggFlameAnimation } from '@/utils/animations'
 
 const emit = defineEmits<{
   search: [query: string]
+  fileDrop: [files: FileList]
 }>()
 
-const query = ref('')
-const focused = ref(false)
-const placeholder = 'Введите ГОСТ, СП, чертёж или инцидент…'
-const inputRef = ref<HTMLInputElement>()
-const flameRef = ref<HTMLElement>()
-const showEasterEgg = ref(false)
+// Состояние
+const searchQuery = ref('')
+const isFocused = ref(false)
+const showExamples = ref(true)
+const showVoiceSearch = ref(true)
+const showDragDrop = ref(false)
 
-// Konami Code: ↑↑↓↓←→←→BA
-const konamiSequence = [
-  'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-  'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'
-]
-let currentSequence: string[] = []
+// Примеры поиска
+const searchExamples = ref([
+  'СП 62.13330-2021',
+  'ГОСТ 5542-2014',
+  'Инцидент ГРС-12',
+  'Регуляторы давления'
+])
 
-function onFocus() {
-  focused.value = true
-  if (flameRef.value) {
-    animateFlame(flameRef.value, true)
+// Вычисляемые свойства
+const hasQuery = computed(() => searchQuery.value.trim().length > 0)
+
+// Методы
+function handleInput() {
+  // Автоматический поиск при вводе (с задержкой)
+  if (searchQuery.value.length >= 3) {
+    setTimeout(() => {
+      if (searchQuery.value.length >= 3) {
+        performSearch()
+      }
+    }, 500)
   }
 }
 
-function onBlur() {
-  focused.value = false
-  if (flameRef.value) {
-    animateFlame(flameRef.value, false)
-  }
+function performSearch() {
+  if (!hasQuery.value) return
+  emit('search', searchQuery.value.trim())
 }
 
-function onSearch() {
-  if (query.value.trim()) {
-    emit('search', query.value.trim())
-  }
+function clearSearch() {
+  searchQuery.value = ''
+  showExamples.value = true
 }
 
-function handleVoiceResult(transcript: string) {
-  query.value = transcript
-  onSearch()
+function handleFocus() {
+  isFocused.value = true
+  showExamples.value = true
 }
 
-function handleFileUpload(file: File) {
-  console.log('Файл загружен:', file.name)
-  // TODO: отправить файл на сервер для индексации
-}
-
-function handleKeySequence(event: KeyboardEvent) {
-  currentSequence.push(event.key)
-  
-  // Сохраняем только последние 8 клавиш
-  if (currentSequence.length > konamiSequence.length) {
-    currentSequence.shift()
-  }
-  
-  // Проверяем совпадение с Konami Code
-  if (currentSequence.length === konamiSequence.length) {
-    const matches = currentSequence.every((key, index) => key === konamiSequence[index])
-    
-    if (matches) {
-      triggerEasterEgg()
-      currentSequence = []
-    }
-  }
-}
-
-function triggerEasterEgg() {
-  showEasterEgg.value = true
-  
-  if (flameRef.value) {
-    easterEggFlameAnimation(flameRef.value)
-  }
-  
-  // Скрываем через 3 секунды
+function handleBlur() {
+  isFocused.value = false
+  // Скрываем примеры через небольшую задержку
   setTimeout(() => {
-    showEasterEgg.value = false
-  }, 3000)
+    if (!isFocused.value) {
+      showExamples.value = false
+    }
+  }, 200)
 }
 
+function handleVoiceResult(text: string) {
+  searchQuery.value = text
+  performSearch()
+}
+
+function handleFileDrop(files: FileList) {
+  emit('fileDrop', files)
+}
+
+// Жизненный цикл
 onMounted(() => {
-  // Фокус на input при загрузке
-  if (inputRef.value) {
-    inputRef.value.focus()
-  }
+  // Проверяем поддержку голосового поиска
+  showVoiceSearch.value = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window
+  
+  // Проверяем поддержку drag & drop
+  showDragDrop.value = 'ondrop' in window
+})
+
+onUnmounted(() => {
+  // Очистка
 })
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/tokens.scss';
+
 .hero-search {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 32px;
+  width: 100%;
+  max-width: $search-oval-width;
+  margin: 0 auto;
+  
+  @include mobile {
+    max-width: $search-oval-width-mobile;
+  }
 }
-.search-oval {
+
+.search-container {
   position: relative;
-  width: 600px;
-  height: 64px;
-  background: #fff;
-  border-radius: 32px;
-  box-shadow: $color-shadow-xl;
+  width: 100%;
+}
+
+.search-input-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  padding: 0 24px;
-  gap: 12px;
-  transition: box-shadow $transition-fast;
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: $search-oval-height / 2;
+  box-shadow: $color-shadow-medium;
+  border: 2px solid transparent;
+  transition: all $transition-smooth;
+  backdrop-filter: blur(10px);
+  
+  @include mobile {
+    border-radius: $search-oval-height-mobile / 2;
+    height: $search-oval-height-mobile;
+  }
+  
+  &:hover {
+    box-shadow: $color-shadow-xl;
+    transform: translateY(-2px);
+  }
+  
+  &.focused {
+    border-color: $color-accent;
+    box-shadow: $color-glow-orange;
+  }
 }
+
+.search-icon {
+  padding: 0 20px;
+  font-size: 1.2rem;
+  color: $color-text-light;
+  transition: color $transition-fast;
+  
+  @include mobile {
+    padding: 0 16px;
+    font-size: 1rem;
+  }
+}
+
 .search-input {
   flex: 1;
   border: none;
-  outline: none;
-  font-size: 1.5rem;
   background: transparent;
+  padding: 20px 0;
+  font-size: 1.1rem;
   color: $color-text-main;
+  outline: none;
+  
+  @include mobile {
+    padding: 16px 0;
+    font-size: 1rem;
+  }
+  
+  &::placeholder {
+    color: $color-text-light;
+    opacity: 0.7;
+  }
+  
+  &:focus::placeholder {
+    opacity: 0.5;
+  }
 }
-.flame-icon {
+
+.clear-btn {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  color: $color-text-light;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all $transition-fast;
+  
+  @include mobile {
+    padding: 6px 12px;
+  }
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: $color-text-main;
+  }
+}
+
+.voice-search {
+  margin-right: 16px;
+  
+  @include mobile {
+    margin-right: 12px;
+  }
+}
+
+.search-examples {
+  margin-top: 20px;
+  animation: fadeInUp $transition-smooth;
+  
+  @include mobile {
+    margin-top: 16px;
+  }
+}
+
+.examples-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 12px;
+  text-align: center;
+  
+  @include mobile {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+  }
+}
+
+.examples-list {
   display: flex;
-  align-items: center;
-  margin-left: 12px;
-  filter: blur(0.5px) brightness(1.1);
-  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), filter 0.6s;
-}
-.flame-icon.active {
-  animation: flame-pulse 1.8s infinite;
-  filter: blur(1.5px) brightness(1.3);
-}
-
-.flame-icon.easter-egg {
-  animation: easter-egg-flame 2s ease-in-out;
-  filter: hue-rotate(180deg) brightness(1.5);
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  
+  @include mobile {
+    gap: 6px;
+  }
 }
 
-@keyframes flame-pulse {
-  0%, 100% { transform: scale(1); filter: blur(1.5px) brightness(1.3); }
-  50% { transform: scale(1.08); filter: blur(2.5px) brightness(1.5); }
+.example-chip {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all $transition-fast;
+  backdrop-filter: blur(10px);
+  
+  @include mobile {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }
 
-@keyframes easter-egg-flame {
-  0% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.3) rotate(90deg); }
-  50% { transform: scale(1.5) rotate(180deg); }
-  75% { transform: scale(1.3) rotate(270deg); }
-  100% { transform: scale(1) rotate(360deg); }
+.drag-drop-zone {
+  margin-top: 16px;
+  
+  @include mobile {
+    margin-top: 12px;
+  }
+}
+
+// Анимации
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Мобильные оптимизации
+@include mobile {
+  .search-input-wrapper {
+    min-height: $search-oval-height-mobile;
+  }
+  
+  .search-examples {
+    .examples-list {
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      
+      &::-webkit-scrollbar {
+        height: 2px;
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 1px;
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 1px;
+      }
+    }
+  }
+}
+
+// Планшетные оптимизации
+@include tablet {
+  .hero-search {
+    max-width: $search-oval-width-tablet;
+  }
+  
+  .search-input-wrapper {
+    height: $search-oval-height-tablet;
+  }
 }
 </style> 

@@ -67,7 +67,7 @@ npm run build-index
 
 ### Структура проекта
 ```
-knowledgeAI/
+DataGazCore/
 ├── src/
 │   ├── components/           # Vue компоненты
 │   │   ├── sections/        # Секции лендинга

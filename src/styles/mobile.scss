@@ -1,0 +1,423 @@
+// === ГЛОБАЛЬНЫЕ МОБИЛЬНЫЕ СТИЛИ ===
+@import './tokens.scss';
+
+// Базовые мобильные настройки
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+// Мобильные оптимизации
+@include mobile {
+  // Улучшенная производительность
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  // Оптимизация прокрутки
+  .landing,
+  .hero-section,
+  .section-container {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  // Улучшенные touch события
+  button,
+  a,
+  .feature-card,
+  .example-chip,
+  .contact-card {
+    touch-action: manipulation;
+    cursor: pointer;
+    min-height: 44px; // Улучшенная доступность для touch
+    min-width: 44px;
+    
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+  
+  // Оптимизация изображений
+  img,
+  svg {
+    max-width: 100%;
+    height: auto;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  // Улучшенная типографика
+  h1, h2, h3, h4, h5, h6 {
+    word-break: break-word;
+    hyphens: auto;
+    line-height: 1.2;
+  }
+  
+  p {
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+  
+  // Оптимизация форм
+  input,
+  textarea,
+  select {
+    font-size: 16px; // Предотвращает зум на iOS
+    border-radius: 8px;
+    min-height: 44px; // Улучшенная доступность
+    
+    &:focus {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+  }
+  
+  // Улучшенная доступность
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  // Оптимизация для landscape ориентации
+  @media (orientation: landscape) and (max-height: 500px) {
+    .hero-section {
+      min-height: 100vh;
+      padding: 60px 0 40px;
+    }
+    
+    .hero-stats {
+      flex-direction: row;
+      gap: 24px;
+    }
+    
+    .section-container {
+      padding: 30px 16px;
+    }
+  }
+  
+  // Оптимизация для больших экранов
+  @media (min-width: 480px) and (max-width: 767px) {
+    .hero-title {
+      font-size: clamp(2rem, 8vw, 2.8rem);
+    }
+    
+    .section-title {
+      font-size: clamp(1.8rem, 6vw, 2.2rem);
+    }
+  }
+  
+  // Оптимизация для очень маленьких экранов
+  @media (max-width: 360px) {
+    .hero-title {
+      font-size: clamp(1.5rem, 8vw, 2rem);
+    }
+    
+    .section-title {
+      font-size: clamp(1.3rem, 6vw, 1.8rem);
+    }
+    
+    .hero-description,
+    .section-subtitle {
+      font-size: 0.9rem;
+    }
+  }
+  
+  // Дополнительная оптимизация для очень маленьких экранов (320px и меньше)
+  @media (max-width: 320px) {
+    .hero-title {
+      font-size: clamp(1.3rem, 7vw, 1.8rem);
+      line-height: 1.1;
+    }
+    
+    .section-title {
+      font-size: clamp(1.1rem, 5vw, 1.6rem);
+    }
+    
+    .hero-description,
+    .section-subtitle {
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    
+    .hero-stats {
+      gap: 16px;
+      
+      .stat-item {
+        .stat-number {
+          font-size: 1.5rem;
+        }
+        
+        .stat-label {
+          font-size: 0.75rem;
+        }
+      }
+    }
+    
+    .feature-card {
+      padding: 16px;
+      
+      .feature-title {
+        font-size: 1.1rem;
+      }
+      
+      .feature-description {
+        font-size: 0.9rem;
+      }
+    }
+    
+    .mobile-menu-content {
+      width: 100%;
+      max-width: 280px;
+    }
+    
+    .mobile-nav .nav-link {
+      padding: 14px 16px;
+      
+      .nav-text {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+// Планшетные оптимизации
+@include tablet {
+  .hero-section {
+    padding: 80px 0 60px;
+  }
+  
+  .section-container {
+    padding: 60px 24px;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+// Оптимизация производительности
+@include mobile {
+  // Уменьшение сложности анимаций
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  
+  // Оптимизация для устройств с низкой производительностью
+  @media (max-resolution: 1dppx) {
+    .flame-particles,
+    .energy-flow,
+    .circuit-lines {
+      display: none;
+    }
+  }
+  
+  // Оптимизация для устройств с ограниченной памятью
+  .hero-background {
+    will-change: auto;
+  }
+  
+  // Улучшенная поддержка жестов
+  .swipeable {
+    touch-action: pan-x pan-y;
+  }
+  
+  .scrollable {
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+// Улучшенная поддержка темной темы
+@media (prefers-color-scheme: dark) {
+  @include mobile {
+    .dev-banner {
+      background: linear-gradient(90deg, #1f2937 0%, #374151 100%);
+    }
+    
+    .hero-section {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #dbeafe 100%);
+    }
+  }
+}
+
+// Оптимизация для устройств с высоким DPI
+@include mobile {
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .feature-icon,
+    .collab-logo {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+  }
+}
+
+// Улучшенная поддержка различных браузеров
+@include mobile {
+  // Safari оптимизации
+  @supports (-webkit-appearance: none) {
+    input[type="search"] {
+      -webkit-appearance: none;
+      border-radius: 8px;
+    }
+  }
+  
+  // Firefox оптимизации
+  @supports (scrollbar-width: thin) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: $color-accent rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  // Edge оптимизации
+  @supports (-ms-ime-align: auto) {
+    .hero-section {
+      background-attachment: scroll;
+    }
+  }
+}
+
+// Улучшенная поддержка различных размеров экранов
+@include mobile {
+  // Для устройств с вырезами (notch) - улучшенная поддержка
+  @supports (padding: max(0px)) {
+    .mobile-navigation {
+      padding-top: max(16px, env(safe-area-inset-top));
+      padding-right: max(16px, env(safe-area-inset-right));
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+    
+    .hero-section {
+      padding-top: max(120px, calc(120px + env(safe-area-inset-top)));
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+    }
+    
+    .section-container {
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+    }
+    
+    .mobile-menu-content {
+      padding-top: max(0px, env(safe-area-inset-top));
+      padding-bottom: max(0px, env(safe-area-inset-bottom));
+      height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
+  }
+  
+  // Для устройств с виртуальными кнопками
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .cta-section {
+      padding-bottom: max(40px, calc(40px + env(safe-area-inset-bottom)));
+    }
+    
+    .mobile-menu-content {
+      padding-bottom: max(20px, calc(20px + env(safe-area-inset-bottom)));
+    }
+  }
+}
+
+// Оптимизация для устройств с ограниченной пропускной способностью
+@include mobile {
+  @media (max-width: 480px) {
+    // Уменьшаем качество анимаций
+    .flame-particles,
+    .energy-flow,
+    .circuit-lines {
+      animation-duration: 3s;
+    }
+    
+    // Упрощаем градиенты
+    .hero-section {
+      background: linear-gradient(135deg, #005bbf 0%, #4d8fd9 100%);
+    }
+  }
+}
+
+// Улучшенная поддержка различных языков
+@include mobile {
+  // Для языков с длинными словами
+  [lang="de"],
+  [lang="fi"],
+  [lang="nl"] {
+    .hero-title,
+    .section-title {
+      word-break: break-all;
+    }
+  }
+  
+  // Для языков с вертикальным письмом
+  [lang="ja"],
+  [lang="ko"],
+  [lang="zh"] {
+    .hero-title,
+    .section-title {
+      writing-mode: horizontal-tb;
+    }
+  }
+}
+
+// Дополнительные улучшения для мобильных устройств
+@include mobile {
+  // Улучшенная навигация
+  .mobile-navigation {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: $z-mobile-menu;
+    
+    // Улучшенная поддержка для устройств с вырезами
+    @supports (padding: max(0px)) {
+      padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom));
+    }
+  }
+  
+  // Улучшенные кнопки для touch устройств
+  button,
+  .btn,
+  .cta-button {
+    min-height: 48px; // Увеличиваем для лучшей доступности
+    min-width: 48px;
+    padding: 12px 20px;
+    font-size: 16px; // Предотвращает зум на iOS
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  
+  // Улучшенная прокрутка
+  .landing {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  // Оптимизация для мобильных браузеров
+  .hero-section,
+  .section-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+} 

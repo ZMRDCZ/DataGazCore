@@ -177,6 +177,73 @@
   }
 }
 
+// === ДОПОЛНИТЕЛЬНЫЕ АНИМАЦИИ ДЛЯ ГЛОБАЛЬНЫХ СТИЛЕЙ ===
+@keyframes colorShift {
+  0% { filter: hue-rotate(0deg); }
+  25% { filter: hue-rotate(90deg); }
+  50% { filter: hue-rotate(180deg); }
+  75% { filter: hue-rotate(270deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: $color-glow-blue; }
+  50% { box-shadow: $color-glow-orange; }
+}
+
+@keyframes touchRipple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+  }
+}
+
+@keyframes buttonShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes buttonRipple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+  }
+}
+
+@keyframes cardGlow {
+  0% {
+    background: linear-gradient(135deg, 
+      rgba(0, 91, 191, 0.05) 0%, 
+      rgba(255, 102, 0, 0.05) 50%, 
+      rgba(77, 143, 217, 0.05) 100%
+    );
+  }
+  100% {
+    background: linear-gradient(135deg, 
+      rgba(0, 91, 191, 0.1) 0%, 
+      rgba(255, 102, 0, 0.1) 50%, 
+      rgba(77, 143, 217, 0.1) 100%
+    );
+  }
+}
+
 // === PERFORMANCE OPTIMIZATIONS ===
 // Принудительное использование GPU для критически важных анимаций
 .gpu-accelerated {

@@ -20,6 +20,13 @@ defineProps<{ kpis: { label: string, value: string }[] }>()
   margin: 32px 0 0 0;
   min-height: $kpi-bar-height;
   animation: fade-in 0.7s cubic-bezier(0.4,0,0.2,1);
+  
+  @include mobile {
+    flex-direction: column;
+    gap: 16px;
+    min-height: $kpi-bar-height-mobile;
+    margin: 24px 0 0 0;
+  }
 }
 .kpi {
   background: #fff;
@@ -29,6 +36,14 @@ defineProps<{ kpis: { label: string, value: string }[] }>()
   min-width: 140px;
   text-align: center;
   transition: box-shadow $transition-fast;
+  
+  @include mobile {
+    border-radius: $card-radius-mobile;
+    padding: 14px 24px;
+    min-width: 120px;
+    width: 100%;
+    max-width: 200px;
+  }
 }
 .kpi-label {
   color: $color-text-secondary;
@@ -36,7 +51,7 @@ defineProps<{ kpis: { label: string, value: string }[] }>()
   margin-bottom: 4px;
 }
 .kpi-value {
-  color: $color-accent-flame;
+  color: $color-accent;
   font-size: 1.4rem;
   font-weight: 700;
 }
