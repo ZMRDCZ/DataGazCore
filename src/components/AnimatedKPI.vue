@@ -166,7 +166,8 @@ const realtimeStats = ref<RealtimeStat[]>([
   { id: 'pressure', icon: '📊', value: '1.2МПа', label: 'Давление' }
 ])
 
-let animationId: number
+// Инициализация переменной
+let animationId: number | null = null
 
 const getFlameStyle = (index: number) => ({
   left: `${Math.random() * 100}%`,
@@ -180,6 +181,11 @@ const getFlowParticleStyle = (index: number) => ({
 })
 
 const animateKPI = (type: keyof KPIValues) => {
+  // Останавливаем предыдущую анимацию
+  if (animationId) {
+    cancelAnimationFrame(animationId)
+  }
+  
   const target = targetValues[type]
   const duration = 2000
   const startTime = Date.now()

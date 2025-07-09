@@ -80,7 +80,7 @@
             v-for="feature in keyFeatures" 
             :key="feature.id"
             class="feature-card"
-            @click="selectFeature(feature)"
+            @click="selectedFeature = selectedFeature?.id === feature.id ? null : feature"
             :class="{ active: selectedFeature?.id === feature.id }"
           >
             <div class="feature-icon">{{ feature.icon }}</div>
@@ -459,7 +459,6 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import HeroSearch from '@/components/HeroSearch.vue'
 import SearchDemo from '@/components/SearchDemo.vue'
 import DocPreview from '@/components/DocPreview.vue'
-import KnowledgeManagementDemo from '@/components/KnowledgeManagementDemo.vue'
 import MobileNavigation from '@/components/MobileNavigation.vue'
 
 interface Feature {
@@ -470,26 +469,10 @@ interface Feature {
   benefits: string[]
 }
 
-interface ContactForm {
-  email: string
-  company: string
-}
-
 // Реактивные данные
 const selectedFeature = ref<Feature | null>(null)
 const showDocPreview = ref(false)
 const previewDocument = ref(null)
-const contactForm = ref<ContactForm>({
-  email: '',
-  company: ''
-})
-
-// Примеры поиска
-const searchExamples = ref([
-  'СП 62.13330-2021',
-  'ГОСТ 5542-2014',
-  'Инцидент ГРС-12'
-])
 
 // Ключевые функции
 const keyFeatures = ref<Feature[]>([
@@ -529,35 +512,9 @@ function handleSearch(query: string) {
   // TODO: Реализовать поиск
 }
 
-function performExampleSearch(example: string) {
-  handleSearch(example)
-}
-
-function selectFeature(feature: Feature) {
-  selectedFeature.value = selectedFeature.value?.id === feature.id ? null : feature
-}
-
 function handleMaintenanceTask(checklist: any[]) {
   console.log('Создание задачи ТОиР:', checklist)
   // TODO: Реализовать создание задачи
-}
-
-function openKnowledgeDemo() {
-  console.log('Открытие демо управления знаниями')
-  // TODO: Открыть интерактивное демо
-}
-
-function requestDemo() {
-  if (!contactForm.value.email) return
-  
-  console.log('Запрос демо:', contactForm.value)
-  // TODO: Отправить запрос на демо
-  
-  // Показать уведомление об успехе
-  alert('Спасибо! Мы свяжемся с вами в течение 24 часов.')
-  
-  // Очистить форму
-  contactForm.value = { email: '', company: '' }
 }
 
 function closeDocPreview() {
@@ -850,36 +807,6 @@ onUnmounted(() => {
 
 .hero-search-container {
   margin-bottom: 48px;
-}
-
-.search-examples {
-  margin-top: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  
-  .examples-label {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.9rem;
-  }
-  
-  .example-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 6px 16px;
-    border-radius: 16px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: $transition-fast;
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-1px);
-    }
-  }
 }
 
 .hero-stats {

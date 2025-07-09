@@ -17,7 +17,7 @@
         <div class="source-particles">
           <div v-for="orbit in source.orbitingParticles" :key="orbit.id" 
                class="orbiting-particle" 
-               :style="getOrbitStyle(orbit, source)"></div>
+               :style="getOrbitStyle(orbit)"></div>
         </div>
       </div>
     </div>
@@ -524,39 +524,41 @@ function updateParticles() {
 function renderParticles() {
   if (!ctx) return
   
+  const context = ctx // Создаем локальную переменную для TypeScript
+  
   particles.value.forEach(particle => {
     // Рендеринг следа
     if (particle.trail.length > 1) {
-      ctx.strokeStyle = particle.color + '40'
-      ctx.lineWidth = 1
-      ctx.beginPath()
-      ctx.moveTo(particle.trail[0].x, particle.trail[0].y)
+      context.strokeStyle = particle.color + '40'
+      context.lineWidth = 1
+      context.beginPath()
+      context.moveTo(particle.trail[0].x, particle.trail[0].y)
       
       for (let i = 1; i < particle.trail.length; i++) {
-        ctx.lineTo(particle.trail[i].x, particle.trail[i].y)
+        context.lineTo(particle.trail[i].x, particle.trail[i].y)
       }
       
-      ctx.stroke()
+      context.stroke()
     }
     
     // Рендеринг частицы
-    const gradient = ctx.createRadialGradient(
+    const gradient = context.createRadialGradient(
       particle.x, particle.y, 0,
       particle.x, particle.y, particle.size * 3
     )
     gradient.addColorStop(0, particle.color)
     gradient.addColorStop(1, particle.color + '00')
     
-    ctx.fillStyle = gradient
-    ctx.beginPath()
-    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-    ctx.fill()
+    context.fillStyle = gradient
+    context.beginPath()
+    context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+    context.fill()
     
     // Блик на частице
-    ctx.fillStyle = '#ffffff80'
-    ctx.beginPath()
-    ctx.arc(particle.x - particle.size * 0.3, particle.y - particle.size * 0.3, particle.size * 0.3, 0, Math.PI * 2)
-    ctx.fill()
+    context.fillStyle = '#ffffff80'
+    context.beginPath()
+    context.arc(particle.x - particle.size * 0.3, particle.y - particle.size * 0.3, particle.size * 0.3, 0, Math.PI * 2)
+    context.fill()
   })
 }
 
@@ -709,7 +711,7 @@ function getFieldStyle(field: GravityField) {
   }
 }
 
-function getOrbitStyle(orbit: OrbitingParticle, source: GravitySource) {
+function getOrbitStyle(orbit: OrbitingParticle) {
   const x = Math.cos(orbit.angle) * orbit.radius
   const y = Math.sin(orbit.angle) * orbit.radius
   

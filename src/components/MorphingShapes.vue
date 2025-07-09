@@ -120,7 +120,7 @@
       <!-- Квантовые вихри -->
       <div class="quantum-vortex" v-for="vortex in quantumVortices" :key="vortex.id" :style="getVortexStyle(vortex)">
         <div class="vortex-center"></div>
-        <div class="vortex-arm" v-for="arm in vortex.arms" :key="arm.id" :style="getArmStyle(arm, vortex)"></div>
+        <div class="vortex-arm" v-for="arm in vortex.arms" :key="arm.id" :style="getArmStyle(arm)"></div>
       </div>
     </div>
     
@@ -154,7 +154,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, reactive, computed } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 interface MorphingShape {
   id: number
@@ -643,7 +643,7 @@ function getVortexStyle(vortex: QuantumVortex) {
   }
 }
 
-function getArmStyle(arm: VortexArm, vortex: QuantumVortex) {
+function getArmStyle(arm: VortexArm) {
   return {
     width: arm.length + 'px',
     height: arm.width + 'px',

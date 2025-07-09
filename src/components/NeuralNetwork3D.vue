@@ -126,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, reactive, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 interface NeuralNode {
   id: number
@@ -261,7 +261,7 @@ function initializeWebGL() {
     canvas.height = rect.height
   }
   
-  gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+  gl = (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')) as WebGLRenderingContext | null
   
   if (!gl) {
     console.error('WebGL не поддерживается')
@@ -398,10 +398,8 @@ function initializeMatrices() {
   
   // Матрица вида
   const eye = [0, 0, 5]
-  const target = [0, 0, 0]
-  const up = [0, 1, 0]
   
-  lookAt(viewMatrix, eye, target, up)
+  lookAt(viewMatrix, eye)
   
   // Матрица модели (единичная)
   identity(modelMatrix)
@@ -751,7 +749,7 @@ function rotateY(matrix: Float32Array, angle: number) {
   matrix[10] = -temp[0] * sin + temp[8] * cos
 }
 
-function lookAt(out: Float32Array, eye: number[], target: number[], up: number[]) {
+function lookAt(out: Float32Array, eye: number[]) {
   // Упрощенная реализация lookAt матрицы
   identity(out)
   out[12] = -eye[0]

@@ -246,7 +246,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 
 // Интерфейсы
 interface GasStation {
@@ -510,6 +510,12 @@ const handleMouseMove = (event: MouseEvent) => {
       network.style.transform = `perspective(1000px) rotateX(${moveY}deg) rotateY(${moveX}deg)`
     }
   }
+}
+
+// Добавляем метод selectPipeline
+const selectPipeline = (pipeline: Pipeline) => {
+  // Логика выбора трубопровода
+  console.log('Selected pipeline:', pipeline)
 }
 
 onMounted(() => {

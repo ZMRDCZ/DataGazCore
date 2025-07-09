@@ -87,7 +87,7 @@
         :style="{ left: tooltip.x + 'px', top: tooltip.y + 'px' }"
       >
         <div class="tooltip-title">{{ tooltip.node?.label }}</div>
-        <div class="tooltip-type">{{ getNodeTypeName(tooltip.node?.type) }}</div>
+        <div class="tooltip-type">{{ getNodeTypeName(tooltip.node?.type || 'unknown') }}</div>
         <div class="tooltip-description">{{ tooltip.node?.description }}</div>
         <div class="tooltip-stats">
           <span>Связей: {{ tooltip.node?.connections || 0 }}</span>

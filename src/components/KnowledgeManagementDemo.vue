@@ -128,7 +128,7 @@
           
           <div class="timeline">
             <div 
-              v-for="(version, index) in documentVersions" 
+              v-for="version in documentVersions" 
               :key="version.id"
               class="timeline-item"
               :class="{ current: version.isCurrent, selected: selectedVersion === version.id }"

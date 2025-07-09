@@ -268,30 +268,6 @@ const createGasParticles = () => {
   }
 }
 
-// Создание газометров
-const createGasMeters = () => {
-  const meters = [
-    { x: 150, y: 150, targetValue: 2.5, unit: "бар" },
-    { x: 650, y: 150, targetValue: 4.2, unit: "м³/ч" },
-    { x: 1150, y: 150, targetValue: 98.7, unit: "%" },
-    { x: 350, y: 350, targetValue: 1.8, unit: "бар" },
-    { x: 950, y: 550, targetValue: 3.6, unit: "м³/ч" }
-  ]
-
-  meters.forEach((meter, index) => {
-    gasMeters.value.push({
-      id: index,
-      x: meter.x,
-      y: meter.y,
-      targetValue: meter.targetValue,
-      currentValue: 0,
-      unit: meter.unit,
-      indicatorAngle: -90,
-      isActive: false
-    })
-  })
-}
-
 // Создание фоновых частиц (аналогично уменьшить)
 const createBackgroundParticles = () => {
   for (let i = 0; i < 30; i++) { // уменьшено до 30
